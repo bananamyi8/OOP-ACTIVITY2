@@ -4,72 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Three
+namespace act3
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            List<int> ages = new List<int>();
+            int[] ages = new int[20];
 
-            Console.WriteLine("Enter at least 20 age values:");
+            int sum = 0;
+            int min = int.MaxValue;
+            int max = int.MinValue;
 
-            while (ages.Count < 20)
+            int under18 = 0;
+            int between18and35 = 0;
+            int between36and60 = 0;
+            int over60 = 0;
+
+            Console.WriteLine("Enter 20 age responses:");
+
+            for (int i = 0; i < 20; i++)
             {
-                Console.Write($"Enter age #{ages.Count + 1}: ");
-                string input = Console.ReadLine();
-
-                if (int.TryParse(input, out int age) && age >= 0)
+                Console.Write($"Age {i + 1}: ");
+                int age;
+                while (!int.TryParse(Console.ReadLine(), out age) || age < 0 || age > 120)
                 {
-                    ages.Add(age);
+                    Console.Write("Invalid. Enter an age between 0 and 120: ");
                 }
-                else
-                {
-                    Console.WriteLine("Please enter a valid non-negative number.");
-                }
-            }
 
-            int sum = 0, min = int.MaxValue, max = int.MinValue;
-            int bracketUnder18 = 0, bracket18to35 = 0, bracket36to60 = 0, bracketOver60 = 0;
-
-            foreach (int age in ages)
-            {
+                ages[i] = age;
                 sum += age;
+
                 if (age < min) min = age;
                 if (age > max) max = age;
 
+                // Categorize
                 if (age < 18)
-                    bracketUnder18++;
+                    under18++;
                 else if (age <= 35)
-                    bracket18to35++;
+                    between18and35++;
                 else if (age <= 60)
-                    bracket36to60++;
+                    between36and60++;
                 else
-                    bracketOver60++;
+                    over60++;
             }
 
-            double average = (double)sum / ages.Count;
+            double average = (double)sum / 20;
 
-            // Output table
-            Console.WriteLine("\nSurvey Statistics:");
-            Console.WriteLine("+__________________+________+");
-            Console.WriteLine("| Category          | Value |");
-            Console.WriteLine("+__________________+________+");
-            Console.WriteLine($"| Total Entries     | {ages.Count,6} |");
-            Console.WriteLine($"| Average Age       | {average,6:F1} |");
-            Console.WriteLine($"| Youngest Age      | {min,6} |");
-            Console.WriteLine($"| Oldest Age        | {max,6} |");
-            Console.WriteLine("+__________________+________+");
+            Console.WriteLine($"Average Age       : {average:F2}");
+            Console.WriteLine($"Minimum Age       : {min}");
+            Console.WriteLine($"Maximum Age       : {max}");
+            Console.WriteLine($"Count < 18        : {under18}");
+            Console.WriteLine($"Count 18 - 35     : {between18and35}");
+            Console.WriteLine($"Count 36 - 60     : {between36and60}");
+            Console.WriteLine($"Count > 60        : {over60}");
 
-            Console.WriteLine("\nAge Bracket Distribution:");
-            Console.WriteLine("+__________________+________+");
-            Console.WriteLine("| Age Bracket          | Count  |");
-            Console.WriteLine("+______________________+________+");
-            Console.WriteLine($"| Under 18 | {bracketUnder18,6} |");
-            Console.WriteLine($"| 18 to 35 | {bracket18to35,6} |");
-            Console.WriteLine($"| 36 to 60 | {bracket36to60,6} |");
-            Console.WriteLine($"| Over 60  | {bracketOver60,6} |");
-            Console.WriteLine("+______________________+________+");
         }
     }
 }
+
